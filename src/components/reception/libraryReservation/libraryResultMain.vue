@@ -25,12 +25,12 @@
   <div style="margin-top: 40px">
 <!--    <el-button size="mini" @click="addArticle()" style="float: right;margin-right: 200px">重新搜索</el-button>-->
     <el-tooltip content="重新搜索" placement="bottom" effect="light">
-    <el-button icon="el-icon-search" @click="toFoundSearch()" style="float: right;margin-right: 200px"  type="primary" circle></el-button>
+    <el-button icon="el-icon-search" @click="toLibraryReservation()" style="float: right;margin-right: 200px"  type="primary" circle></el-button>
     </el-tooltip>
     <div class="articles-area">
       <el-card style="text-align: left">
-        <div v-for="item in founds.slice((currentPage-1)*pageSize,currentPage*pageSize)" :key="item.id">
-          <div style="float:left;width:85%;height: 200px;">
+        <div v-for="item in books.slice((currentPage-1)*pageSize,currentPage*pageSize)" :key="item.id">
+          <div style="float:left;width:85%;height: 150px;">
 <!--            <router-link class="article-link" :to="{path:'blog/article',query:{id: article.id}}">-->
 <!--              <span style="font-size: 20px" class="clearfix">-->
 <!--&lt;!&ndash;                <strong>{{article.article_title}}</strong>&ndash;&gt;-->
@@ -39,29 +39,24 @@
 <!--            </router-link>-->
             <div slot="header" class="clearfix">
               <span><i class="el-icon-reading"></i>{{item.title}}</span>
-<!--              <el-button @click="cancelBook(item)" type="danger" size="mini" style="float: right;" round :disabled="item.canReserve" >取消</el-button>-->
-<!--              <el-button @click="reserveBook(item)" type="success" size="mini" style="float: right;" round :disabled="!item.canReserve">预约</el-button>-->
+              <el-button @click="cancelBook(item)" type="danger" size="mini" style="float: right;" round :disabled="item.canReserve" >取消</el-button>
+              <el-button @click="reserveBook(item)" type="success" size="mini" style="float: right;" round :disabled="!item.canReserve">预约</el-button>
             </div>
 <!--            <el-divider content-position="left">借出时间:{{article.article_date}}</el-divider>-->
 <!--            <router-link class="article-link" :to="{path:'blog/article',query:{id: article.id}}"><p>{{article.article_abstract}}</p></router-link>-->
             <div>
-            <p class="text item"><i class="el-icon-edit"></i>丢失地点:{{item.foundPosition}}</p>
-              <p class="text item"><i class="el-icon-edit"></i>丢失时间:{{item.foundTime}}</p>
-              <p class="text item"><i class="el-icon-edit"></i>联系方式:{{item.foundContract}}</p>
-              <p class="text item"><i class="el-icon-edit"></i>丢失详情:{{item.foundDetail}}</p>
-<!--              <p class="text item"><i class="el-icon-edit"></i>丢失时间:{{item.foundPosition}}</p>-->
+            <p class="text item"><i class="el-icon-edit"></i>作者:{{item.author}}</p>
 <!--              <span><el-button type="success" size="mini" style="float: right;" round>预约</el-button></span>-->
             </div>
-
-<!--            <p class="text item"><i class="el-icon-coin"></i>丢失时间<el-input-number v-model="item.total" :disabled="true" size="mini" controls-position="right"></el-input-number></p>-->
-<!--            <p class="text item"><i class="el-icon-view"></i>已借数量<el-input-number v-model="item.borrowed" :disabled="true" size="mini" controls-position="right"></el-input-number></p>-->
+            <p class="text item"><i class="el-icon-coin"></i>馆存总量<el-input-number v-model="item.total" :disabled="true" size="mini" controls-position="right"></el-input-number></p>
+            <p class="text item"><i class="el-icon-view"></i>已借数量<el-input-number v-model="item.borrowed" :disabled="true" size="mini" controls-position="right"></el-input-number></p>
           </div>
           <el-image
-            style="margin:18px 0 0 30px;width:100px;height: 140px"
-            :src="item.picture"
+            style="margin:18px 0 0 30px;width:100px;height: 120px"
+            :src="item.cover"
             fit="cover">
           </el-image>
-          <el-divider><i class="el-icon-collection-tag"></i><span class="text item"></span></el-divider>
+          <el-divider><i class="el-icon-collection-tag"></i><span class="text item">标签:{{item.category.name}}</span></el-divider>
         </div>
       </el-card>
 <!--      <el-card class="box-card">-->
@@ -106,7 +101,7 @@
       layout="total, prev, pager, next, jumper"
       @current-change="handleCurrentChange"
       :page-size="pageSize"
-      :total="founds.length">
+      :total="books.length">
     </el-pagination>
   </div>
 </template>
@@ -114,10 +109,10 @@
 <script>
 import store from '../../../save'
 export default {
-  name: 'FoundSearchResult',
+  name: 'libraryResultMain',
   data () {
     return {
-      founds: [],
+      books: [],
       pageSize: 4,
       total: '',
       num: 5,
@@ -129,30 +124,29 @@ export default {
   },
   // 12
   mounted () {
-    this.loadFounds()
+    this.loadBooks()
   },
   // 12
   methods: {
-    loadFounds () {
+    loadBooks () {
       this.keywords = store.state.key
       var _this = this
       this.$axios
-        .get('/publish/v1/search/found', {params: {
-          // cardNo: store.state.user.cardNo,
-          title: this.keywords
-        }}).then(resp => {
-          console.log(resp)
+        .post('/reserveSearch', {
+          cardNo: store.state.user.cardNo,
+          key: this.keywords
+        }).then(resp => {
           if (resp && resp.data.code === 200) {
             _this.currentPage = 1
-            _this.founds = resp.data.data.list
+            _this.books = resp.data.result
           }
         })
     },
     handleCurrentChange: function (currentPage) {
       this.currentPage = currentPage
     },
-    toFoundSearch () {
-      this.$router.replace('search')
+    toLibraryReservation () {
+      this.$router.replace('reserve')
     },
     // 13
     reserveBook (item) {

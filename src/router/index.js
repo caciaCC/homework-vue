@@ -7,12 +7,9 @@ import BackMain from '../components/back/common/Main'
 import LoginMain from '../components/login/LoginMain'
 import RegisterMain from '../components/login/RegisterMain'
 import LoginOut from '../components/login/LoginOut'
-import LostSearchMain from '../components/reception/lostSearch/LostSearchMain'
-import FoundSearchMain from '../components/reception/foundSearch/FoundSearchMain'
-import LostSearchResult from '../components/reception/lostSearch/LostSearchResult'
-import LostSearch from '../components/reception/lostSearch/LostSearch'
-import FoundSearchResult from '../components/reception/foundSearch/FoundSearchResult'
-import FoundSearch from '../components/reception/foundSearch/FoundSearch'
+import LibraryReservationMain from '../components/reception/libraryReservation/LibraryReservationMain'
+import LibraryResultMain from '../components/reception/libraryReservation/libraryResultMain'
+import LibraryReservation from '../components/reception/libraryReservation/LibraryReservation'
 import LibraryNoticeMain from '../components/reception/libraryNotice/libraryNoticeMain'
 import ReservationInfo from '../components/reception/libraryNotice/ReservationInfo'
 import LoanInfo from '../components/reception/libraryNotice/LoanInfo'
@@ -42,42 +39,22 @@ export default new Router({
         }
       },
       {
-        path: '/lostSearch',
-        component: LostSearchMain,
+        path: '/libraryReservation',
+        component: LibraryReservationMain,
         meta: {
           requireAuth: true
         },
-        redirect: '/lostSearch/search',
+        redirect: '/libraryReservation/reserve',
         children: [{
-          path: '/lostSearch/search',
-          component: LostSearch,
+          path: '/libraryReservation/reserve',
+          component: LibraryReservation,
           meta: {
             requireAuth: true
           }
         },
         {
-          path: '/lostSearch/result',
-          component: LostSearchResult,
-          meta: {
-            requireAuth: true
-          }
-        }]
-      },
-      {
-        path: '/foundSearch',
-        component: FoundSearchMain,
-        meta: {
-          requireAuth: true
-        },
-        redirect: '/foundSearch/search',
-        children: [{
-          path: '/foundSearch/search',
-          component: FoundSearch,
-          meta: {requireAuth: true
-          }},
-        {
-          path: '/foundSearch/result',
-          component: FoundSearchResult,
+          path: '/libraryReservation/result',
+          component: LibraryResultMain,
           meta: {
             requireAuth: true
           }
@@ -168,42 +145,22 @@ export const createRouter = routes => new Router({
         }
       },
       {
-        path: '/lostSearch',
-        component: LostSearchMain,
+        path: '/libraryReservation',
+        component: LibraryReservationMain,
         meta: {
           requireAuth: true
         },
-        redirect: '/lostSearch/search',
+        redirect: '/libraryReservation/reserve',
         children: [{
-          path: '/lostSearch/search',
-          component: LostSearch,
+          path: '/libraryReservation/reserve',
+          component: LibraryReservation,
           meta: {
             requireAuth: true
           }
         },
         {
-          path: '/lostSearch/result',
-          component: LostSearchResult,
-          meta: {
-            requireAuth: true
-          }
-        }]
-      },
-      {
-        path: '/foundSearch',
-        component: FoundSearchMain,
-        meta: {
-          requireAuth: true
-        },
-        redirect: '/foundSearch/search',
-        children: [{
-          path: '/foundSearch/search',
-          component: FoundSearch,
-          meta: {requireAuth: true
-          }},
-        {
-          path: '/foundSearch/result',
-          component: FoundSearchResult,
+          path: '/libraryReservation/result',
+          component: LibraryResultMain,
           meta: {
             requireAuth: true
           }

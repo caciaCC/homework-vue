@@ -17,7 +17,7 @@ export default {
       var _this = this
       this.$axios
         .post('/logout', {
-          phoneNumber: store.state.user.phoneNumber
+          cardNo: store.state.user.cardNo
         })
         .then(successResponse => {
           if (successResponse.data.code === 200) {
