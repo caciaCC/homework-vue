@@ -13,7 +13,7 @@
 <!--    </div>-->
     <div class="box">
       <div class="searchBox">
-        <input type="text"  v-model="keywords" @keyup.enter="searchClick"  placeholder="请输入你想预约的书籍相关信息(书名或作者名)进行搜索" class="searchInput" style="padding-left: 10px;">
+        <input type="text"  v-model="keywords" @keyup.enter="searchClick"  placeholder="请输入你想查找的失物标题进行搜索" class="searchInput" style="padding-left: 10px;">
         <input type="button" @click="searchClick" value="搜索" class="searchButton">
       </div>
     </div>
@@ -23,7 +23,7 @@
 <script>
 import store from '../../../save'
 export default {
-  name: 'LibraryReservationMain',
+  name: 'LostSearch',
   store,
   data () {
     return {

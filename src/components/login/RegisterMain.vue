@@ -2,12 +2,15 @@
   <body id="paper">
   <el-form class="login-container" label-position="left"
            label-width="0px" v-loading="loading">
-    <h3 class="login_title">学生注册</h3>
+    <h3 class="login_title">用户注册</h3>
     <el-form-item>
-      <el-input type="text" v-model="loginForm.sno" auto-complete="off" placeholder="学号"></el-input>
+      <el-input type="text" v-model="loginForm.userName" auto-complete="off" placeholder="用户名"></el-input>
     </el-form-item>
     <el-form-item>
       <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="对应密码"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-input type="text" v-model="loginForm.phoneNumber" auto-complete="off" placeholder="手机号"></el-input>
     </el-form-item>
     <slide-verify :l="42"
                   :r="10"
@@ -26,7 +29,7 @@
 <!--    </div>-->
     <div>{{msg}}</div>
     <el-form-item style="width: 100%">
-      <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="register">生成借阅证</el-button>
+      <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="register">创建账号</el-button>
     </el-form-item>
   </el-form>
   </body>
@@ -39,8 +42,9 @@ export default {
     return {
       checked: true,
       loginForm: {
-        sno: '',
-        password: ''
+        userName: '',
+        password: '',
+        phoneNumber: ''
       },
       loading: false,
       msg: '',
@@ -63,14 +67,15 @@ export default {
       var _this = this
       if (this.msg === '验证成功') {
         this.$axios
-          .post('/register', {
-            sno: this.loginForm.sno,
-            password: this.loginForm.password
+          .post('info/v1/register', {
+            userName: this.loginForm.userName,
+            password: this.loginForm.password,
+            phoneNumber: this.loginForm.phoneNumber
           })
           .then(resp => {
-            if (resp.data.code === 200) {
-              this.$alert('生成借阅证成功' + `借阅证号:` + resp.data.result.cardNo +
-                '密码:默认为学号对应密码', '提示', {
+            console.log(resp)
+            if (resp && resp.data.code === 200) {
+              this.$alert('注册成功', '提示', {
                 confirmButtonText: '确定'
               })
               _this.$router.replace('/login')
@@ -80,7 +85,12 @@ export default {
               })
             }
           })
-          .catch(failResponse => {})
+          // TODO FIX failResponse
+          .catch(failResponse => {
+            this.$alert('注册失败', '提示', {
+              confirmButtonText: '确定'
+            })
+          })
       }
     },
     onSuccess () {

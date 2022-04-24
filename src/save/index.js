@@ -6,21 +6,23 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: {
-      cardNo: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).cardNo
+      phoneNumber: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).phoneNumber
       // role: window.sessionStorage.getItem('user' || '[]') == null ? '' : JSON.parse(window.sessionStorage.getItem('user' || '[]')).role
     },
+    Authorization: window.sessionStorage.getItem('Authorization') == null ? window.sessionStorage.getItem('Authorization') : '',
     key: '',
     cid: '',
     backMenus: []
   },
   mutations: {
-    login (state, user) {
-      state.user = user
-      window.sessionStorage.setItem('user', JSON.stringify(user))
+    login (state, token) {
+      console.log(token)
+      state.Authorization = token
+      window.sessionStorage.setItem('Authorization', token)
     },
     logout (state) {
-      state.user = []
-      window.sessionStorage.removeItem('user')
+      state.Authorization = ''
+      window.sessionStorage.removeItem('Authorization')
     },
     setKey (state, key) {
       state.key = key
